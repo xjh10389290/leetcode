@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> appear;
+        while (n!=1&&appear.find(n)==appear.end())
+        {
+            appear.insert(n);
+            n=nextnum(n);
+        }
+        if (n==1)
+        return true;
+        return false;
+    }
+    
+    int nextnum(int n)
+    {
+        int res=0;
+        while (n>0)
+        {
+            res+=(n%10)*(n%10);
+            n=n/10;
+        }
+        return res;
+    }
+};
