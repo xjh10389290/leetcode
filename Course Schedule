@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> map;
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        
+        vector<int> tmp;
+        for (int i=0;i<=numCourses;i++)
+            map.push_back(tmp);
+        vector<int> coursehash(numCourses+1,0);
+        for (int i=0;i<prerequisites.size();i++)
+        {
+            map[prerequisites[i][1]].push_back(prerequisites[i][0]);
+            coursehash[prerequisites[i][0]]++;
+        }
+        int total=0;
+        deque<int> que;
+        //initail
+        for (int i=0;i<numCourses;i++)
+        {
+            if (coursehash[i]==0)
+            {
+                 que.push_back(i);
+                 total++;
+            }
+        }
+        while (total!=numCourses&&que.size()!=0)
+        {
+            int index=que[0];
+            for (int i=0;i<map[index].size();i++)
+            {
+                coursehash[map[index][i]]--;
+                if (coursehash[map[index][i]]==0)
+                {
+                     que.push_back(map[index][i]);
+                     total++;                   
+                }
+            } 
+            que.pop_front();
+            
+        }
+        if (total==numCourses)
+            return true;
+        else
+            return false;
+    }
+};
