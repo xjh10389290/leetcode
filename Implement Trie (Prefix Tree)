@@ -1,0 +1,83 @@
+class TrieNode {
+public:
+    // Initialize your data structure here.
+    TrieNode *left[26];
+    bool wordend;
+        
+    TrieNode() {
+        wordend=false;
+        for (int i=0;i<26;i++)
+            left[i]=NULL;
+    }
+
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string s) {
+        TrieNode *cur=root;
+        int index=0;
+        while (s.length()>index)
+        {
+            int cha=s[index]-'a';
+            if (cur->left[cha]==NULL)
+            {
+                cur->left[cha]=new TrieNode();
+            }
+            index++;
+            cur=cur->left[cha];
+        }
+        cur->wordend=true;
+
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string s) {
+        TrieNode *cur=root;
+        int index=0;
+        while (s.length()>index)
+        {
+            int cha=s[index]-'a';
+            if (cur->left[cha]==NULL)
+            {
+                return false;
+            }
+            index++;
+            cur=cur->left[cha];
+        }
+        if (cur->wordend==true)
+        return true;
+        return false;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string s) {
+        TrieNode *cur=root;
+        int index=0;
+        while (s.length()>index)
+        {
+            int cha=s[index]-'a';
+            if (cur->left[cha]==NULL)
+            {
+                return false;
+            }
+            index++;
+            cur=cur->left[cha];
+        }
+        return true;        
+    }
+
+private:
+    TrieNode* root;
+};
+
+// Your Trie object will be instantiated and called as such:
+// Trie trie;
+// trie.insert("somestring");
+// trie.search("key");
