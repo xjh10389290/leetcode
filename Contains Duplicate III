@@ -1,0 +1,34 @@
+// set的lower_bound其实蛮好用的，lower_bound（a）返回的是不少于a的最小的数
+
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        if (k==0)
+            return false;
+        deque<long long> seq;
+        multiset<long long> window_seq;
+        for (int i=0;i<nums.size();i++)
+        {
+            //查看window_seq里面大于nums[i]-t的最小值
+            std::multiset<long long>::iterator it=window_seq.lower_bound(nums[i]-t);
+			long long upp=(long long)nums[i]+t;
+            if (it!=window_seq.end()&&*it<=upp)
+                return true;
+            
+            if (seq.size()<k)
+            {
+                seq.push_back(nums[i]);
+                window_seq.insert(nums[i]);
+            }
+            else
+            {
+                int f=seq.front();
+                seq.pop_front();
+                seq.push_back(nums[i]);
+                window_seq.erase(f);
+                window_seq.insert(nums[i]);
+            }
+        }
+        return false;
+    }
+};
