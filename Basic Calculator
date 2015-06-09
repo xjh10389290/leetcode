@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> num;
+        stack<char> opt;
+        int ans=0;
+        s='('+s+')';
+        deque<int> num_one_time;
+        deque<char> opt_one_time;
+        bool lastisopt=false;
+        for (int i=0;i<s.length();i++)
+        {
+            if (s[i]==' ') continue;
+            if (s[i]>='0'&&s[i]<='9')
+            {
+                if (opt.empty()==false)
+                {
+                    if (lastisopt==false)
+                    {
+                        int t=num.top();
+                        num.pop();
+                        t=t*10+(s[i]-'0');
+                        num.push(t);
+                    }
+                    else
+                        num.push(s[i]-'0');
+                }
+                else
+                    num.push(s[i]-'0');
+                lastisopt=false;
+            }
+            else
+            {
+                lastisopt=true;
+                opt.push(s[i]);
+                if (opt.top()==')')
+                {
+                    num_one_time.clear();
+                    opt_one_time.clear();
+                    opt.pop();
+                    while (opt.top()!='(')
+                    {
+                        num_one_time.push_front(num.top());num.pop();
+                        opt_one_time.push_front(opt.top());opt.pop();
+                    }
+                    num_one_time.push_front(num.top());num.pop();
+                    opt.pop();
+                    if (num_one_time.size()==0) continue;
+                    int tmp=num_one_time[0];
+                    for (int j=0;j<opt_one_time.size();j++)
+                    {
+                        if (opt_one_time[j]=='+')
+                            tmp+=num_one_time[j+1];
+                        else
+                            tmp-=num_one_time[j+1];
+                    }
+                    num.push(tmp);
+                }
+            }
+        }
+        return num.top();
+    }
+    
+
+};
